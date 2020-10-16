@@ -65,7 +65,7 @@ def get_city_urls(states_for_url):
     options.add_experimental_option('useAutomationExtension', False)
 
     for st in states_for_url:
-        base = 'https://www.website.com/'
+        base = 'https://www.trailwebsite.com/'
         if st == 'hawaii':
             path = f'{st}/cities'
         else:

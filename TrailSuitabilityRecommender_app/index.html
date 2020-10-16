@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+<title>Trail Suitability Recommender</title>
+<link rel='stylesheet' type='text/css' href='{{url_for('static', filename='style.css')}}'>
+<link rel='stylesheet' type='text/css' href='https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css'>
+<div class=page>
+  <h1>Trail Suitability Recommender</h1>
+  <div class=metanav>
+    <br>
+    <h2>
+      Choose a trail you have liked/enjoyed previously to find similar trails.
+    </h2>
+    <br>
+
+    <form id='index_form' method='GET' action='index'>
+      <p>
+        Select Trail Suitability:
+        <select onchange='document.forms[0].submit()' name='category'>
+          <!-- <option value='0'>-</option> -->
+          <option value='' selected='selected'>-Category-</option>
+          <!-- <option value='one'>Stroller Friendly</option>
+          <option value='two'>Kid Friendly</option>
+          <option value='three'>Dog Friendly</option>
+          <option value='four'>Wheelchair Friendly</option> -->
+          {% for row in categories %}
+          <option value='{{ row[0] }}' {% if row[0] == request.args['category'] %} selected {% endif %}>{{ row[0] }}</option>
+          {% endfor %}
+        </select>
+      </p>
+     <!-- <br><br> -->
+
+      <p>
+        Select Region (County) to Find Trails:
+        <select onchange='document.forms[0].submit()' name='county'>
+          <!-- <option value='0'>-</option> -->
+          <option value='' selected='selected'>-County-</option>
+          <!-- <option value='one'>Santa Clara</option>
+          <option value='two'>Contra Costa</option>
+          <option value='three'>Marin</option>
+          <option value='four'>Kern</option> -->
+          {% for row in counties %}
+          <option value='{{ row[0] }}' {% if row[0] == request.args['county'] %} selected {% endif %}>{{ row[0] }}</option>
+          {% endfor %}
+        </select>
+      </p>
+     <!-- <br><br> -->
+
+      <p>
+        <!-- Select trail that you have liked/enjoyed before: -->
+        Select Trail:
+        <select onchange='document.forms[0].submit()' name='trail_name'>
+          <!-- <option value='0'>-</option> -->
+          <option value='' selected='selected'>-Trail Name-</option>
+          <!-- <option value='one'>trail name 1</option>
+          <option value='two'>trail name 2</option>
+          <option value='three'>trail name 3</option>
+          <option value='four'>trail name 4</option>
+          <option value='five'>trail name 5</option> -->
+          {% for row in trails %}
+          <option value='{{ row[0].replace('\u2028', '') }}' {% if row[0] == request.args['trail_name'] %} selected {% endif %}>{{ row[0].replace('\u2028', '') }}</option>
+          {% endfor %}
+        </select>
+      </p>
+     <!-- <br><br> -->
+
+      <p>
+        Select Region (County) to Find Similar Trails:
+        <select onchange='document.forms[0].submit()' name='county_similar_trails'>
+          <!-- <option value='0'>-</option> -->
+          <option value='' selected='selected'>-County-</option>
+          <!-- <option value='one'>Santa Clara</option>
+          <option value='two'>Contra Costa</option>
+          <option value='three'>Marin</option>
+          <option value='four'>Kern</option> -->
+          {% for row in counties %}
+          <option value='{{ row[0] }}' {% if row[0] == request.args['county_similar_trails'] %} selected {% endif %}>{{ row[0] }}</option>
+          {% endfor %}
+        </select>
+      </p>
+     <!-- <br><br> -->
+
+      <!-- <p>
+        Select Number of Similar Trails:
+        <select onchange='document.forms[0].submit()' name='number'>
+          <option value='0' selected='selected'>-Number-</option> -->
+          <!-- <option value='10'>10</option>
+          <option value='20'>20</option>
+          <option value='30'>30</option>
+          <option value='40'>40</option>
+          <option value='50'>50</option> -->
+          <!-- {% for row in numbers %}
+          <option value='{{ row[0] }}' {% if row[0] == request.args['number'] %} selected {% endif %}>{{ row[0] }}</option>
+          {% endfor %}
+        </select>
+      </p> -->
+     <!-- <br><br> -->
+
+      <!-- <p>
+        <input type='submit' value='Submit'/>
+      </p> -->
+    </form>
+
+    <head>
+    <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      /* border: 1px solid black; */
+      /* width: 100%; */
+    }
+
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+
+    caption, p {
+      text-align: left;
+    }
+    </style>
+    </head>
+
+    <body>
+      <br><br>
+      <h2>{{request.args['category']}} Selected Trail</h2>
+      <br>
+      <!-- https://www.w3schools.com/html/html_tables.asp -->
+      <table style='width:90%'>
+        <!-- <caption>Caption: Selected Trail</caption> -->
+        <tr>
+          <!-- <th>Trail ID</th> -->
+          <th>Trail Name</th>
+          <th>City</th>
+          <th>County</th>
+          <th>Difficulty</th>
+          <th>Distance (miles)</th>
+          <th>Elevation Gain (feet)</th>
+          <th>Route Type</th>
+          <th>Duration (minutes)</th>
+        </tr>
+        {% for row in selected_trail %}
+        <tr>
+          <!-- <td>{{row[0]}}</td> -->
+          <td width='400'><a href="{{row[9]}}">{{row[1]}}</a></td>
+          <td width='150'>{{row[2]}}</td>
+          <td width='100'>{{row[3]}}</td>
+          <td width='80'>{{row[4]}}</td>
+          <td width='100'>{{row[5]}}</td>
+          <td width='125'>{{row[6]}}</td>
+          <td width='80'>{{row[7]}}</td>
+          <td width='110'>{{row[8]}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <!-- <p><strong>Note:</strong> Enter note here.</p> -->
+
+    <br><br>
+    <h2>Similar Trails</h2>
+    <br>
+    <!-- https://www.w3schools.com/html/html_tables.asp -->
+    <table id='table_id' class='display' style='width:100%'>
+      <caption><strong>Notes:</strong></caption>
+      <caption> (1) The <strong>Rank</strong> column represents ordered similarity rank between the Selected Trail and Similar Trails within the selected county based on a calculated similarity score.</caption>
+      <caption> (2) The <strong>Newly Tagged Trail</strong> column represents whether these are newly identified "{{request.args['category']}}" trails (i.e., not previously tagged in the source data as being "{{request.args['category']}}").
+      <!-- <br><br> -->
+      <thead>
+        <tr>
+          <!-- <th>Trail ID</th>
+          <th>Similarity Score</th>
+          <th>Similarity Rank</th> -->
+          <th>Rank</th>
+          <th>Trail Name</th>
+          <th>City</th>
+          <th>County</th>
+          <th>Difficulty</th>
+          <th>Distance (miles)</th>
+          <th>Elevation Gain (feet)</th>
+          <th>Route Type</th>
+          <th>Duration (minutes)</th>
+          <!-- <th>{{request.args['category']}} Trail</th> -->
+          <th>Newly Tagged Trail</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in similar_trails %}
+        <tr>
+          <!-- <td>{{row['trail_id']}}</td>
+          <td>{{'%0.3f' | format(row['score'] | float)}}</td>
+          <td>{{row['rank']}}</td> -->
+          <td width='25' style='text-align:center'>{{loop.index}}</td>
+          <td width='350'><a href='{{row['url']}}'>{{row['trail_name']}}</a></td>
+          <td width='150'>{{row['city']}}</td>
+          <td width='100'>{{row['county']}}</td>
+          <td width='80'>{{row['trail_difficulty']}}</td>
+          <td width='100'>{{row['distance_miles']}}</td>
+          <td width='125'>{{row['elevation_gain_ft']}}</td>
+          <td width='80'>{{row['route_type']}}</td>
+          <td width='110'>{{row['duration_mins']}}</td>
+          <!-- <td>{{row['category_selected']}}</td> -->
+          {% if row['category_selected'] == 0 %}
+          <td width='115'>Yes</td>
+          {% else %}
+          <td width='115'>No</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <!-- <p><strong>Note:</strong> Similar trails with {{request.args['category']}} = 0 were not previously tagged in the data as being {{request.args['category']}}.  These are newly identified {{request.args['category']}} trails.</p> -->
+
+    <!-- Previous/Next buttons -->
+    <!-- <a href="#" class="previous">&laquo; Previous</a>
+    <a href="#" class="next">Next &raquo;</a> -->
+
+    </body>
+
+    <!-- https://datatables.net/manual/installation -->
+    <script language='javascript' type='text/javascript'> 
+      $(document).ready(function () {
+        $('#table_id').DataTable();
+      }); 
+    </script> 
+
+    <script type='text/javascript' charset='utf8' src='https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js'></script>
+
+  </div>
+</div>
+</html>

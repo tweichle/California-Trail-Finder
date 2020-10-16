@@ -146,7 +146,7 @@ def get_trail_urls(city_urls_list):
         cnx.commit()
 
 
-# # California Trail URLs
+# California Trail URLs
 city_urls_list_sql_100 = city_urls_list_sql[0:100]
 len(city_urls_list_sql_100)
 

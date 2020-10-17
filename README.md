@@ -1,6 +1,8 @@
 # Trail-Suitability-Recommender
 
+Summary and goal
 
+List files and what each one does
 
 ### Web Application: CaliforniaTrailFinder.com
 

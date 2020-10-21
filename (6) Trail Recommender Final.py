@@ -171,7 +171,7 @@ model_cosine = tc.recommender.item_content_recommender.create(item_data=trail_in
 model_cosine
 
 # # Save the model. The model is saved as a directory which can then be loaded using the 'turicreate.load_model' method
-# location = '/Users/yangweichle/Documents/Employment/TRAINING/DATA SCIENCE/SharpestMinds/Project/TrailSuitabilityRecommender_app/TuriCreate_model'
+# location = '/Users/yangweichle/Documents/Employment/TRAINING/DATA SCIENCE/SharpestMinds/Project/CaliforniaTrailFinder_app/TuriCreate_model'
 # model_cosine.save(location)
 
 # # Load any Turi Create model that was previously saved

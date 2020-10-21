@@ -1,4 +1,4 @@
-# Trail-Suitability-Recommender
+# California-Trail-Finder
 
 Summary and goal
 

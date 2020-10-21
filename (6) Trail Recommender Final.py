@@ -10,6 +10,7 @@ import time
 import json
 
 from sklearn.preprocessing import PolynomialFeatures, StandardScaler, MinMaxScaler
+import pickle
 
 # Create or get a MySQL connection object
 cnx = mysql.connector.connect(user='root', password=mySQL_password,
@@ -105,11 +106,9 @@ pd.reset_option('display.max_rows')
 pd.reset_option('display.max_columns')
 
 # Trail tags to include in model
-trail_tags = ['Backpacking', 'Beach', 'BirdWatching', 'Blowdown', 'Bugs', 'Camping', 'Cave', 'CityWalk', 'Closed', 'DogFriendly', 'DogsOnLeash',
-              'Fee', 'Fishing', 'Forest', 'Hiking', 'HistoricSite', 'HorsebackRiding', 'KidFriendly', 'Lake', 'MountainBiking', 'Muddy', 'NatureTrips',
-              'NoDogs', 'NoShade', 'OffTrail', 'OhvOffRoadDriving', 'OverGrown', 'PartiallyPaved', 'Paved', 'PrivateProperty', 'River', 'RoadBiking',
-              'RockClimbing', 'Rocky', 'Running', 'ScenicDriving', 'Scramble', 'Snow', 'Snowshoeing', 'StrollerFriendly', 'Views', 'Walking', 'WashedOut',
-              'Waterfall', 'WheelchairFriendly', 'WildFlowers', 'Wildlife']
+trail_tags = ['Backpacking', 'Beach', 'BirdWatching', 'Blowdown', 'Bugs', 'Camping', 'Cave', 'CityWalk', 'Closed', 'DogFriendly', 'DogsOnLeash', 'Fee', 'Fishing', 'Forest', 'Hiking', 'HistoricSite', 'HorsebackRiding', 'KidFriendly', 'Lake',
+              'MountainBiking', 'Muddy', 'NatureTrips', 'NoDogs', 'NoShade', 'OffTrail', 'OhvOffRoadDriving', 'OverGrown', 'PartiallyPaved', 'Paved', 'PrivateProperty', 'River', 'RoadBiking', 'RockClimbing', 'Rocky', 'Running', 'ScenicDriving',
+              'Scramble', 'Snow', 'Snowshoeing', 'StrollerFriendly', 'Views', 'Walking', 'WashedOut', 'Waterfall', 'WheelchairFriendly', 'WildFlowers', 'Wildlife']
 
 # Create a list of model columns
 model_cols = ['elevation_gain_ft', 'distance_miles', 'trail_difficulty_easy', 'trail_difficulty_moderate', 'trail_difficulty_hard', 'route_type_Loop', 'route_type_Out_and_Back', 'route_type_Point_to_Point']
@@ -171,16 +170,107 @@ k = len(trail_info_final_item_data_sf)
 model_cosine = tc.recommender.item_content_recommender.create(item_data=trail_info_final_item_data_sf, item_id='trail_id', weights='auto', similarity_metrics='cosine', max_item_neighborhood_size=k)
 model_cosine
 
-# Save the model. The model is saved as a directory which can then be loaded using the 'turicreate.load_model' method
-location = '/Users/yangweichle/Documents/Employment/TRAINING/DATA SCIENCE/SharpestMinds/Project/TrailSuitabilityRecommender_app/TuriCreate_model'
-model_cosine.save(location)
+# # Save the model. The model is saved as a directory which can then be loaded using the 'turicreate.load_model' method
+# location = '/Users/yangweichle/Documents/Employment/TRAINING/DATA SCIENCE/SharpestMinds/Project/TrailSuitabilityRecommender_app/TuriCreate_model'
+# model_cosine.save(location)
 
-# Load any Turi Create model that was previously saved
-loaded_model_cosine = tc.load_model(location)
+# # Load any Turi Create model that was previously saved
+# loaded_model_cosine = tc.load_model(location)
+
+
+# ### Recommend Similar Items
+# Drop table if exists
+sql = 'DROP TABLE IF EXISTS recommender'
+cursor.execute(sql)
+
+# Store CREATE statements in Python dictionary TABLES
+TABLES = {}
+
+TABLES['recommender'] = (
+    "CREATE TABLE `recommender` ("
+    "  `trail_id` INT(11) NOT NULL,"
+    "  `similiar_trails` MEDIUMBLOB,"
+    "  PRIMARY KEY (`trail_id`)"
+    ") ENGINE=InnoDB")
+
+# Create tables by iterating over the items of the TABLES dictionary
+for table_name in TABLES:
+    table_description = TABLES[table_name]
+    try:
+        print('Creating table {}: '.format(table_name), end='')
+        cursor.execute(table_description)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_TABLE_EXISTS_ERROR:
+            print('already exists')
+        else:
+            print(err.msg)
+    else:
+        print('OK')
+
+#cursor.close()
+#cnx.close()
+
+
+def recommender(trail_id_list):
+
+    recommender_list = []
+
+    trails_added = 0
+    for trail_i in range(len(trail_id_list)):
+
+        # Recommend the 'k' highest scored items based on the interactions given in 'observed_items'
+        # Note: observed_items: a list/SArray of items to use to make recommendations, or an SFrame of items and optionally ratings and/or other interaction data;
+        #                       **the model will then recommend the most similar items to those given
+        #       k: the number of recommendations to generate
+        item_recommender = model_cosine.recommend_from_interactions(observed_items=trail_id_list[trail_i:trail_i+1], k=k)
+
+        item_recommender_trail_id_list = item_recommender['trail_id'].to_numpy().tolist()
+        #print(item_recommender_trail_id_list)
+
+        item_recommender_score_list = item_recommender['score'].to_numpy().tolist()
+        #print(item_recommender_score_list)
+
+        similiar_trails = [list(a) for a in zip(item_recommender_trail_id_list, item_recommender_score_list)]
+        #print('\nSimiliar Trails:', similiar_trails)
+
+        trail_id = int(trail_id_list[trail_i:trail_i+1].to_numpy()[0])
+        #print('\nTrail ID:', trail_id)
+
+        list_item = [trail_id, similiar_trails]
+
+        # Return the pickled representation of the object as a bytes object
+        pickled_list = pickle.dumps(similiar_trails)
+
+        recommender_list.append(list_item)
+
+        values = (trail_id, pickled_list)
+        #print('Values:', values)
+
+        # Execute given statement using given parameters
+        # Note: If the record is a duplicate, then the IGNORE keyword tells MySQL to discard it silently without generating an error
+        cursor.execute('''
+            INSERT IGNORE INTO recommender (trail_id, similiar_trails)
+            VALUES (%s, %s)''', values)
+        rowcount = cursor.rowcount
+
+        if rowcount == 1:
+            trails_added += 1
+    print('Trails added:', trails_added)
+
+    # Commit current transaction
+    cnx.commit()
+
+    return recommender_list
+
+trail_id_list = trail_info_final_sf['trail_id']
+
+# Get Recommended Similar Items
+get_time_start = time.time()
 
 # Recommend the 'k' highest scored items based on the interactions given in 'observed_items'
 # Note: observed_items: a list/SArray of items to use to make recommendations, or an SFrame of items and optionally ratings and/or other interaction data;
 #                       **the model will then recommend the most similar items to those given
 #       k: the number of recommendations to generate
-item_recommender = loaded_model_cosine.recommend_from_interactions(observed_items=[10000006], k=k)
-item_recommender.print_rows(num_rows=100)
+recommender_list = recommender(trail_id_list)
+minutes = (time.time() - get_time_start)/60
+print('Get Recommended Similar Items time: {} hrs: {} mins'.format(int(minutes // 60), round(minutes % 60)))

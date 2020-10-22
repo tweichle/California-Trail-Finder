@@ -1,11 +1,11 @@
 # California Trail Finder
 
-## Summary and 
+## Summary
 
 ## Goal
 
 
-## Files:
+## Files
 (0) Create MySQL Database.py
 - This program creates the MySQL database for managing data tables that will be created.
 

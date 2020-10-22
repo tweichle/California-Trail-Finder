@@ -1,8 +1,8 @@
-# California-Trail-Finder
+# California Trail Finder
 
-Summary and goal
+## Summary and 
 
-List files and what each one does
+## Goal
 
 
 ## Files:

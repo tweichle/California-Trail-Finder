@@ -10,10 +10,10 @@ List files and what each one does
 - This program creates the MySQL database for managing data tables that will be created.
 
 (1) Get City URLs from States.py
-- This program accesses the California cities URL, webscrapes the URL associated with each city, and inserts the data into a table in the database.
+- This program accesses the California cities URL, webscrapes the URL and other info associated with each city, and inserts the data into a table in the database.
 
 (2) Get Trail URLs from Cities.py
-- This program accesses each of the California city URLs, webscrapes the URL associated with each trail in the city, and inserts the data into a table in the database.
+- This program accesses each of the California city URLs, webscrapes the URL and other info associated with each trail in the city, and inserts the data into a table in the database.
 
 (3) Get Trail Info from Trail URLs.py
 - This program accesses each of the California trail URLs, webscrapes the trail information associated with each trail, and inserts the data into a table in the database.
@@ -30,8 +30,6 @@ List files and what each one does
 - This program:
   - Reads the final trail info table and implements the trail similarity recommender system.
   - Calculates the similarity between each trail in the data and inserts the data into a table in the database.
-
-
 
 
 ### Web Application: [CaliforniaTrailFinder](http://50.18.56.244/index)

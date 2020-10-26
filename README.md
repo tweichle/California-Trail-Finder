@@ -32,6 +32,6 @@
   - Calculates the similarity between each trail in the data and inserts the data into a table in the database.
 
 
-### Web Application: [CaliforniaTrailFinder](http://50.18.56.244/index)
+### Web Application: [CaliforniaTrailFinder](http://CaliforniaTrailFinder.com/)
 
 ![w9e3jeghhrqtew5tlgcn](https://user-images.githubusercontent.com/41403941/96290086-e8337a00-0f9a-11eb-8e76-e0dfcb28ae84.jpg)

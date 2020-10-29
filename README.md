@@ -1,6 +1,6 @@
 # California-Trail-Finder
 ### Summary
-This repository includes the steps to build [CaliforniaTrailFinder](http://CaliforniaTrailFinder.com/), a web-based recommender system for finding similar (kid, dog, stroller, or wheelchair friendly) hiking trails by county compared to a previously liked user specified trail.
+This repository includes the steps to build [CaliforniaTrailFinder.com](http://CaliforniaTrailFinder.com/), a web-based recommender system for finding similar (kid, dog, stroller, or wheelchair friendly) hiking trails by county compared to a previously liked user specified trail.
 
 ![w9e3jeghhrqtew5tlgcn](https://user-images.githubusercontent.com/41403941/96290086-e8337a00-0f9a-11eb-8e76-e0dfcb28ae84.jpg)
 
@@ -15,33 +15,25 @@ This repository includes the steps to build [CaliforniaTrailFinder](http://Calif
 
 **Files**
 
-0. A;AKSDJF
 (0) Create MySQL Database.py
-- This program creates the MySQL database for managing data tables that will be created.
+- Create the MySQL database for managing data tables that will be created.
 
 (1) Get City URLs from States.py
-- This program accesses the California cities URL, webscrapes the URL and other info associated with each city, and inserts the data into a table in the database.
+- Access the California cities URL, webscrape the URL and other info associated with each city, and insert the data into a table in the database.
 
 (2) Get Trail URLs from Cities.py
-- This program accesses each of the California city URLs, webscrapes the URL and other info associated with each trail in the city, and inserts the data into a table in the database.
+- Access each of the California city URLs, webscrape the URL and other info associated with each trail in the city, and insert the data into a table in the database.
 
 (3) Get Trail Info from Trail URLs.py
-- This program accesses each of the California trail URLs, webscrapes the trail information associated with each trail, and inserts the data into a table in the database.
+- Access each of the California trail URLs, webscrape the trail information associated with each trail, and insert the data into a table in the database.
 
 (4) Trail Info EDA and Create Pandas DataFrame.ipynb
-- This program:
-  - Performs exploratory data analysis on the trail information table.  
-  - Examines trail info missingness and distributions, data visualizations, and performs data processing in preparation for creating the final table.
+- Perform exploratory data analysis on the trail information table.  
+- Examine trail info missingness and distributions, data visualizations, and perform data processing in preparation for creating the final table.
 
 (5) Create Trail Info Final Table.py
-- This program cleans and processes the trail info table and inserts the data into a final table in the database.
+- Clean and process the trail info table and insert the data into a final table in the database.
 
 (6) Trail Recommender Final.py
-- This program:
-  - Reads the final trail info table and implements the trail similarity recommender system.
-  - Calculates the similarity between each trail in the data and inserts the data into a table in the database.
-
-
-### Web Application: [CaliforniaTrailFinder](http://CaliforniaTrailFinder.com/)
-
-
+- Read the final trail info table and implement the trail similarity recommender system.
+- Calculate the similarity between each trail in the data and insert the data into a table in the database.

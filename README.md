@@ -1,6 +1,5 @@
 # California-Trail-Finder
-
-## Summary
+### Summary
 This repository includes the steps to build [CaliforniaTrailFinder](http://CaliforniaTrailFinder.com/), a web-based recommender system for finding similar (kid, dog, stroller, or wheelchair friendly) hiking trails by county compared to a previously liked user specified trail.
 
 ![w9e3jeghhrqtew5tlgcn](https://user-images.githubusercontent.com/41403941/96290086-e8337a00-0f9a-11eb-8e76-e0dfcb28ae84.jpg)
@@ -14,7 +13,7 @@ This repository includes the steps to build [CaliforniaTrailFinder](http://Calif
     - Model Development
     - Web Development/Deployment
 
-## Files
+**Files**
 (0) Create MySQL Database.py
 - This program creates the MySQL database for managing data tables that will be created.
 

@@ -2,7 +2,7 @@
 ### Summary
 This repository includes the steps to build [CaliforniaTrailFinder.com](http://CaliforniaTrailFinder.com/), a full-stack hiking trail recommender system. Incorporates user-specific trail preferences such as kid, dog, stroller, or wheelchair friendly, logs previously liked trails, and finds similar trails.
 
-Blog Post on Medium: [Building CaliforniaTrailFinder](tinyurl.com/y4aqby6a)
+Blog Post on Medium: [Building CaliforniaTrailFinder](tinyurl.com/y4aqby6a) 
 
 ![w9e3jeghhrqtew5tlgcn](https://user-images.githubusercontent.com/41403941/96290086-e8337a00-0f9a-11eb-8e76-e0dfcb28ae84.jpg)
 
